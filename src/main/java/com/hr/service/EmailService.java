@@ -1,32 +1,41 @@
 package com.hr.service;
 
+import com.hr.dto.EmailDTO;
 import com.hr.exceptions.ResourceNotFoundException;
+import com.hr.mapper.EmailMapper;
 import com.hr.model.Email;
 import com.hr.repository.EmailRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class EmailService {
 
-    @Autowired
-    private EmailRepository emailRepository;
+    private final EmailRepository emailRepository;
 
-    public List<Email> getAllEmails() {
-        return emailRepository.findAll();
+    public EmailService(EmailRepository emailRepository) {
+        this.emailRepository = emailRepository;
     }
 
-    public Email createEmail(Email email) {
+    public List<EmailDTO> getEmailsByEmployeeId(Long employeeId) {
+        return emailRepository.findAll().stream()
+                .filter(email -> email.getEmployee() != null && email.getEmployee().getId().equals(employeeId))
+                .map(EmailMapper::toDTO)
+                .toList();
+    }
+
+    public EmailDTO createEmail(EmailDTO dto) {
+        Email email = EmailMapper.toEntity(dto);
+        return EmailMapper.toDTO(emailRepository.save(email));
+    }
+
+    public Email updateEmail(Long id, Email email) {
+        email.setId(id);
         return emailRepository.save(email);
-    }
-
-    public Email updateEmail(Long id, Email updatedEmail) {
-        return emailRepository.findById(id).map(email -> {
-            email.setAddress(updatedEmail.getAddress());
-            return emailRepository.save(email);
-        }).orElseThrow(() -> new ResourceNotFoundException("Email not found"));
     }
 
     public void deleteEmail(Long id) {

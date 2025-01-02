@@ -6,17 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false)
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "department_id", nullable = false)
+    @JoinColumn(name = "department_id")
     private Department department;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -24,8 +21,6 @@ public class Employee {
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Email> emails = new ArrayList<>();
-
-    // Getters and Setters
 
     public Employee() {
     }
@@ -78,4 +73,3 @@ public class Employee {
         this.emails = emails;
     }
 }
-

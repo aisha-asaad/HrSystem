@@ -1,8 +1,8 @@
 package com.hr.controller;
 
+import com.hr.dto.EmailDTO;
 import com.hr.model.Email;
 import com.hr.service.EmailService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,27 +12,30 @@ import java.util.List;
 @RequestMapping("/api/emails")
 public class EmailController {
 
-    @Autowired
-    private EmailService emailService;
+    private final EmailService emailService;
 
-    @GetMapping
-    public List<Email> getAllEmails() {
-        return emailService.getAllEmails();
+    public EmailController(EmailService emailService) {
+        this.emailService = emailService;
+    }
+
+    @GetMapping("/employee/{employeeId}")
+    public ResponseEntity<List<EmailDTO>> getEmailsByEmployeeId(@PathVariable Long employeeId) {
+        return ResponseEntity.ok(emailService.getEmailsByEmployeeId(employeeId));
     }
 
     @PostMapping
-    public Email createEmail(@RequestBody Email email) {
-        return emailService.createEmail(email);
+    public ResponseEntity<EmailDTO> createEmail(@RequestBody EmailDTO dto) {
+        return ResponseEntity.ok(emailService.createEmail(dto));
     }
 
     @PutMapping("/{id}")
-    public Email updateEmail(@PathVariable Long id, @RequestBody Email updatedEmail) {
-        return emailService.updateEmail(id, updatedEmail);
+    public Email updateEmail(@PathVariable Long id, @RequestBody Email email) {
+        return emailService.updateEmail(id, email);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteEmail(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteEmail(@PathVariable Long id) {
         emailService.deleteEmail(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }

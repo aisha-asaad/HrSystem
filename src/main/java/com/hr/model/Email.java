@@ -3,29 +3,23 @@ package com.hr.model;
 import jakarta.persistence.*;
 
 
-
 @Entity
 public class Email {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false)
-    private String address;
+    private String email;
 
     @ManyToOne
-    @JoinColumn(name = "employee_id", nullable = false)
+    @JoinColumn(name = "employee_id")
     private Employee employee;
-
-    // Getters and Setters
-
 
     public Email() {
     }
 
-    public Email(Long id, String address, Employee employee) {
+    public Email(Long id, String email, Employee employee) {
         this.id = id;
-        this.address = address;
+        this.email = email;
         this.employee = employee;
     }
 
@@ -37,12 +31,12 @@ public class Email {
         this.id = id;
     }
 
-    public String getAddress() {
-        return address;
+    public String getEmail() {
+        return email;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setEmail(String emailAddress) {
+        this.email = emailAddress;
     }
 
     public Employee getEmployee() {

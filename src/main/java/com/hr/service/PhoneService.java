@@ -1,32 +1,40 @@
 package com.hr.service;
 
-import com.hr.exceptions.ResourceNotFoundException;
+import com.hr.dto.PhoneDTO;
+import com.hr.mapper.PhoneMapper;
 import com.hr.model.Phone;
 import com.hr.repository.PhoneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Service
 public class PhoneService {
 
-    @Autowired
-    private PhoneRepository phoneRepository;
+    private final PhoneRepository phoneRepository;
 
-    public List<Phone> getAllPhones() {
-        return phoneRepository.findAll();
+    public PhoneService(PhoneRepository phoneRepository) {
+        this.phoneRepository = phoneRepository;
     }
 
-    public Phone createPhone(Phone phone) {
+//    public List<PhoneDTO> getPhonesByEmployeeId(Long employeeId) {
+//        return phoneRepository.findByEmployeeId(employeeId)
+//                .stream()
+//                .map(PhoneMapper::toDTO)
+//                .toList();
+//    }
+
+    public PhoneDTO createPhone(PhoneDTO dto) {
+        Phone phone = PhoneMapper.toEntity(dto);
+        return PhoneMapper.toDTO(phoneRepository.save(phone));
+    }
+
+    public Phone updatePhone(Long id, Phone phone) {
+        phone.setId(id);
         return phoneRepository.save(phone);
-    }
-
-    public Phone updatePhone(Long id, Phone updatedPhone) {
-        return phoneRepository.findById(id).map(phone -> {
-            phone.setNumber(updatedPhone.getNumber());
-            return phoneRepository.save(phone);
-        }).orElseThrow(() -> new ResourceNotFoundException("Phone not found"));
     }
 
     public void deletePhone(Long id) {

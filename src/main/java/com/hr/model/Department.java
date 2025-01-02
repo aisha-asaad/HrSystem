@@ -1,7 +1,6 @@
 package com.hr.model;
 
 import jakarta.persistence.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,15 +10,12 @@ public class Department {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String name;
 
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Employee> employees = new ArrayList<>();
 
-    // Getters and Setters
     public Department() {
-
     }
 
     public Department(Long id, String name, List<Employee> employees) {
@@ -50,14 +46,5 @@ public class Department {
 
     public void setEmployees(List<Employee> employees) {
         this.employees = employees;
-    }
-
-    @Override
-    public String toString() {
-        return "Department{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", employees=" + employees +
-                '}';
     }
 }

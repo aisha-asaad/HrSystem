@@ -2,30 +2,23 @@ package com.hr.model;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 public class Phone {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false)
-    private String number;
+    private String phoneNumber;
 
     @ManyToOne
-    @JoinColumn(name = "employee_id", nullable = false)
+    @JoinColumn(name = "employee_id")
     private Employee employee;
-
-    // Getters and Setters
 
     public Phone() {
     }
 
-    public Phone(Long id, String number, Employee employee) {
+    public Phone(Long id, String phoneNumber, Employee employee) {
         this.id = id;
-        this.number = number;
+        this.phoneNumber = phoneNumber;
         this.employee = employee;
     }
 
@@ -37,12 +30,12 @@ public class Phone {
         this.id = id;
     }
 
-    public String getNumber() {
-        return number;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public Employee getEmployee() {
